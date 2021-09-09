@@ -1,32 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DocumentManagement.Workflows.Extensions;
+using Elsa.Activities.Email.Options;
+using Elsa.Activities.Http.Options;
+using Elsa.Persistence.EntityFramework.Sqlite;
+using Elsa.Server.Hangfire.Extensions;
+using Hangfire;
+using Hangfire.SQLite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
 
 namespace DocumentManagement.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConnectionString = Configuration.GetConnectionString("Sqlite");
+
+            // Razor Pages (for UI).
             services.AddRazorPages();
+
+            // Hangfire (for background tasks).
+            AddHangfire(services, dbConnectionString);
+
+            // Elsa (workflows engine).
+            AddWorkflowServices(services, dbConnectionString);
+
+            // Allow arbitrary client browser apps to access the API for demo purposes only.
+            // In a production environment, make sure to allow only origins you trust.
+            services.AddCors(cors => cors.AddDefaultPolicy(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().WithExposedHeaders("Content-Disposition")));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -36,21 +53,53 @@ namespace DocumentManagement.Web
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app
+                .UseStaticFiles()
+                .UseCors()
+                .UseRouting()
+                .UseHttpActivities() // Install middleware for triggering HTTP Endpoint activities.
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapRazorPages();
+                    endpoints.MapControllers(); // Elsa API Endpoints are implemented as ASP.NET API controllers.
+                });
+        }
 
-            app.UseRouting();
+        private void AddHangfire(IServiceCollection services, string dbConnectionString)
+        {
+            services
+                .AddHangfire(config => config
+                    // Use same SQLite database as Elsa for storing jobs. 
+                    .UseSQLiteStorage(dbConnectionString)
+                    .UseSimpleAssemblyNameTypeSerializer()
 
-            app.UseAuthorization();
+                    // Elsa uses NodaTime primitives, so Hangfire needs to be able to serialize them.
+                    .UseRecommendedSerializerSettings(settings => settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb)))
+                .AddHangfireServer((sp, options) =>
+                {
+                    // Bind settings from configuration.
+                    Configuration.GetSection("Hangfire").Bind(options);
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
+                    // Configure queues for Elsa workflow dispatchers.
+                    options.ConfigureForElsaDispatchers(sp);
+                });
+        }
+
+        private void AddWorkflowServices(IServiceCollection services, string dbConnectionString)
+        {
+            services.AddWorkflowServices(dbContext => dbContext.UseSqlite(dbConnectionString));
+
+            // Configure SMTP.
+            services.Configure<SmtpOptions>(options => Configuration.GetSection("Elsa:Smtp").Bind(options));
+
+            // Configure HTTP activities.
+            services.Configure<HttpActivityOptions>(options => Configuration.GetSection("Elsa:Server").Bind(options));
+
+            // Elsa API (to allow Elsa Dashboard to connect for checking workflow instances).
+            services.AddElsaApiEndpoints();
         }
     }
 }
