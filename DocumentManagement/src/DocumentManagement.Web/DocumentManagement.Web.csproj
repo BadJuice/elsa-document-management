@@ -6,6 +6,14 @@
     <ProjectReference Include="..\DocumentManagement.Workflows\DocumentManagement.Workflows.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Elsa.Persistence.EntityFramework.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Elsa.Server.Api" Version="2.2.1" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
+    <PackageReference Include="Hangfire.SQLite" Version="1.4.2" />
+    <PackageReference Include="Storage.Net" Version="9.3.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
