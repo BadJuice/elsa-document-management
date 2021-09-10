@@ -1,0 +1,7 @@
+You can execute this command to add the packages to the project
+
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Hangfire.AspNetCore &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Hangfire.SQLite &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Storage.Net &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Persistence.EntityFramework.Sqlite &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Server.Api
