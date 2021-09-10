@@ -4,4 +4,8 @@ dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Hangfire.SQLite &&
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Storage.Net &&
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Persistence.EntityFramework.Sqlite &&
-dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Server.Api
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Server.Api &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Server.Hangfire --version 2.2.1 &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Activities.Http --version 2.2.1 &&
+dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Activities.Email --version 2.2.1
+
