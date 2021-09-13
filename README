@@ -1,4 +1,4 @@
-You can execute this command to add the packages to the project
+You can execute this command to add the packages to the Web project
 
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Hangfire.AspNetCore &&
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Hangfire.SQLite &&
@@ -9,3 +9,12 @@ dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Activities.Http --version 2.2.1 &&
 dotnet add DocumentManagement/src/DocumentManagement.Web/DocumentManagement.Web.csproj package Elsa.Activities.Email --version 2.2.1
 
+
+And this command to add the packages to the Workflows project
+
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa &&
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Activities.Email &&
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Activities.Http &&
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Persistence.EntityFramework.Core &&
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Server.Hangfire &&
+dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Microsoft.EntityFrameworkCore
