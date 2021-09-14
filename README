@@ -18,3 +18,8 @@ dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagemen
 dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Persistence.EntityFramework.Core &&
 dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Elsa.Server.Hangfire &&
 dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagement.Workflows.csproj package Microsoft.EntityFrameworkCore
+
+And then this command to add the packages to the Core projects
+
+dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package Storage.Net &&
+dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package Microsoft.Extensions.Options
