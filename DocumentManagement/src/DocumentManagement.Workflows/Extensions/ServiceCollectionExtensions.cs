@@ -1,8 +1,11 @@
 using System;
+using System.IO;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
+using Elsa.Providers.Workflows;
 using Elsa.Server.Hangfire.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Storage.Net;
 
 namespace DocumentManagement.Workflows.Extensions
 {
@@ -33,7 +36,13 @@ namespace DocumentManagement.Workflows.Extensions
                     // Configure HTTP activities.
                     .AddHttpActivities()
                 );
-            
+
+                // Get directory path to current assembly.
+                var currentAssemblyPath = Path.GetDirectoryName(typeof(ServiceCollectionExtensions).Assembly.Location);
+
+                // Configure Storage for BlobStorageWorkflowProvider with a directory on disk from where to load workflow definition JSON files from the local "Workflows" folder.
+                services.Configure<BlobStorageWorkflowProviderOptions>(options => options.BlobStorageFactory = () => StorageFactory.Blobs.DirectoryFiles(Path.Combine(currentAssemblyPath, "Workflows")));
+
             return services;
         }
     }
