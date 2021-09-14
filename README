@@ -22,4 +22,5 @@ dotnet add DocumentManagement/src/DocumentManagement.Workflows/DocumentManagemen
 And then this command to add the packages to the Core projects
 
 dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package Storage.Net &&
-dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package Microsoft.Extensions.Options
+dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package Microsoft.Extensions.Options &&
+dotnet add DocumentManagement/src/DocumentManagement.Core/DocumentManagement.Core.csproj package MediatR
