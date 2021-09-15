@@ -30,3 +30,12 @@ And finally this command to add the packages to the Persistence project
 dotnet add DocumentManagement/src/DocumentManagement.Persistence/DocumentManagement.Persistence.csproj package Microsoft.EntityFrameworkCore.Design &&
 dotnet add DocumentManagement/src/DocumentManagement.Persistence/DocumentManagement.Persistence.csproj package Microsoft.EntityFrameworkCore.Sqlite &&
 dotnet add DocumentManagement/src/DocumentManagement.Persistence/DocumentManagement.Persistence.csproj package Microsoft.Extensions.Hosting.Abstractions
+
+You also need to install this tool globally
+
+dotnet tool install --global dotnet-ef
+
+And then you can generate migrations by running this command inside the Persistence project ConfigureForElsaDispatchers
+
+dotnet ef migrations add Initial
+
