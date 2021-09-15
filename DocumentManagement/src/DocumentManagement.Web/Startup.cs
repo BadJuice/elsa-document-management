@@ -12,7 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
-
+using DocumentManagement.Core.Extensions;
+using DocumentManagement.Core.Options;
+using System.IO;
+using DocumentManagement.Persistence.Extensions;
+using Storage.Net;
 namespace DocumentManagement.Web
 {
     public class Startup
@@ -38,6 +42,12 @@ namespace DocumentManagement.Web
 
             // Elsa (workflows engine).
             AddWorkflowServices(services, dbConnectionString);
+
+            // Domain services.
+            AddDomainServices(services);
+
+            // Persistence.
+            AddPersistenceServices(services, dbConnectionString);
 
             // Allow arbitrary client browser apps to access the API for demo purposes only.
             // In a production environment, make sure to allow only origins you trust.
@@ -101,5 +111,20 @@ namespace DocumentManagement.Web
             // Elsa API (to allow Elsa Dashboard to connect for checking workflow instances).
             services.AddElsaApiEndpoints();
         }
+
+        private void AddDomainServices(IServiceCollection services)
+        {
+        services.AddDomainServices();
+
+        // Configure Storage for DocumentStorage.
+        services.Configure<DocumentStorageOptions>(options => options.BlobStorageFactory = () => StorageFactory.Blobs.DirectoryFiles(Path.Combine(Environment.ContentRootPath, "App_Data/Uploads")));
+
+        }
+
+        private void AddPersistenceServices(IServiceCollection services, string dbConnectionString)
+        {
+            services.AddDomainPersistence(dbConnectionString);
+        }
+
     }
 }
