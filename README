@@ -35,7 +35,10 @@ You also need to install this tool globally
 
 dotnet tool install --global dotnet-ef
 
-And then you can generate migrations by running this command inside the Persistence project ConfigureForElsaDispatchers
+And then you can generate migrations by running this command inside the Persistence project
 
 dotnet ef migrations add Initial
 
+Also make sure that the Persistence project targets net5.0
+
+<TargetFramework>net5.0</TargetFramework>
