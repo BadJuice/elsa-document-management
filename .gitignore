@@ -474,3 +474,4 @@ FodyWeavers.xsd
 # added by BadJuice
 #
 MSBuild_Logs
+DocumentManagement/src/DocumentManagement.Web/App_Data/Uploads/
