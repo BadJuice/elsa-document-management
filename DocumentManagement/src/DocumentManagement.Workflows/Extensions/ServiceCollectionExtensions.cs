@@ -8,6 +8,7 @@ using Elsa.Server.Hangfire.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Net;
+using DocumentManagement.Workflows.Activities;
 
 namespace DocumentManagement.Workflows.Extensions
 {
@@ -39,6 +40,9 @@ namespace DocumentManagement.Workflows.Extensions
 
                     // Configure HTTP activities.
                     .AddHttpActivities()
+
+                    // Add custom activities
+                    .AddActivitiesFrom<GetDocument>()
                 );
 
                 // Get directory path to current assembly.
