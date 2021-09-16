@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using DocumentManagement.Workflows.Handlers;
+using Elsa;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Providers.Workflows;
 using Elsa.Server.Hangfire.Extensions;
@@ -13,7 +15,9 @@ namespace DocumentManagement.Workflows.Extensions
     {
         public static IServiceCollection AddWorkflowServices(this IServiceCollection services, Action<DbContextOptionsBuilder> configureDb)
         {
-            return services.AddElsa(configureDb);
+            return services
+                .AddElsa(configureDb)
+                .AddNotificationHandlersFrom<StartHelloFileWorkflow>();
         }
 
         private static IServiceCollection AddElsa(this IServiceCollection services, Action<DbContextOptionsBuilder> configureDb)
