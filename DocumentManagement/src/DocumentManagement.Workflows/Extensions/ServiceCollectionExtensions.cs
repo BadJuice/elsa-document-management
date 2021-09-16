@@ -17,7 +17,7 @@ namespace DocumentManagement.Workflows.Extensions
         {
             return services
                 .AddElsa(configureDb)
-                .AddNotificationHandlersFrom<StartHelloFileWorkflow>();
+                .AddNotificationHandlersFrom<StartDocumentWorkflows>();
         }
 
         private static IServiceCollection AddElsa(this IServiceCollection services, Action<DbContextOptionsBuilder> configureDb)
